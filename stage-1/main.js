@@ -90,9 +90,10 @@ async function searchOpponent(name) {
 
 function setupSearchInput() {
   const input = document.getElementById("opponent-search");
+    if (!input) return; // Si no encontramos el input, no hacemos nada
 
-  // Pre-llenamos el input si hay un oponente guardado
-  const lastOpponent = localStorage.getItem("lastOpponent");
+      // Pre-llenamos el input si hay un oponente guardado, o bien lo que es igual a recuperar el último oponente buscado
+        const lastOpponent = localStorage.getItem("lastOpponent");
   if (lastOpponent) {
     input.value = lastOpponent;
     searchOpponent(lastOpponent);
@@ -100,17 +101,49 @@ function setupSearchInput() {
 
   input.addEventListener("input", () => {
     clearTimeout(debounceTimer);
+    const query = input.value.trim();
 
-    if (!input.value.trim()) return;
+    //En caso de que el usuario borre lo digitado, limpia el estado del oponente
+    if (!query) {
+      state.opponent = null;
+      state.opponentMoves = [];
+      state.error.opponent = null;
+      state.loading.opponent = false;
+      render(state);
+      return;
+    }
 
     debounceTimer = setTimeout(() => {
-      searchOpponent(input.value.trim());
+      searchOpponent(query);
     }, 500);
   });
+}
+
+function setupBattleNavigation() {
+  const battleBtn = document.getElementById("start-battle");
+  if (!battleBtn) return;
+
+    battleBtn.addEventListener("click", () => {
+    if (state.trainer && state.opponent) {
+        const battleConfig = {
+            player: { 
+                data: state.trainer,
+                moves: state.trainerMoves
+             },
+            opponent: {
+                data: state.opponent,
+                moves: state.opponentMoves
+            }
+         };
+            localStorage.setItem("battleConfig", JSON.stringify(battleConfig));
+                window.location.href = "../stage-2/index.html";
+                }
+          });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   loadFavoritePokemon();
   setupSearchInput();
+  setupBattleNavigation();
 });
 
