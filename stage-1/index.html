@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokemon Battle - Stage 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>SELECCIONE SU OPONENTE</h1>
+    </header>
+
+    <main class="selector-container">
+        <!-- LADO IZQUIERDO: MI PIKACHU -->
+        <section id="trainer-card" class="card-container">
+            <!-- Aquí el render.js dibujará a Pikachu -->
+        </section>
+
+        <!-- CENTRO: BUSCADOR Y BOTÓN -->
+        <section class="controls">
+            <div class="search-box">
+                <label for="opponent-search">Search Opponent:</label>
+                <input type="text" id="opponent-search" placeholder="Ex: Mewtwo, Charizard...">
+            </div>
+            
+            <button id="start-battle" disabled>ESPERANDO AL OPONENTE (ó valiente)...</button>
+        </section>
+
+        <!-- LADO DERECHO: EL OPONENTE -->
+        <section id="opponent-card" class="card-container">
+            <!-- Aquí el render.js dibujará al oponente buscado -->
+        </section>
+    </main>
+
+    <!-- IMPORTANTE: type="module" es lo que permite usar import/export -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>
