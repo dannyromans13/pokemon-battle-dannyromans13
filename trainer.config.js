@@ -2,11 +2,11 @@ const TRAINER = {
   // ── Quién eres ──
   name: "DANNY",
   hometown: "San José, Costa Rica",
-  catchphrase: "El voltaje siempre gana.",
+  catchphrase: "¡ El voltaje siempre gana !",
 
   // ── Nombre del PokeAPI o ID ──
   favoritePokemon: "pikachu",
-  nickname: "Pik",
+  nickname: "Pikachu",
   battleCry: "¡Piiiiiikachuuuu!",
 
   // ── Movimiento Definitivo ──
@@ -18,4 +18,4 @@ const TRAINER = {
   loseMessage: "Volveremos más fuertes!.",
 };
 
-export default TRAINER;
+export default TRAINER; 

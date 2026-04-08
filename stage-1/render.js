@@ -33,15 +33,8 @@ function renderTrainerCard(state) {
         container.innerHTML = `
             <div class="card theme-${type}">
                 <h2>${TRAINER.name.toUpperCase()}</h2>
-                <p class="hometown">${TRAINER.hometown} · "${TRAINER.catchphrase}"</p>
+                                
                 
-                <div class="sprite-container">
-                    <img src="${p.sprites.front_default}" alt="${p.name}" />
-                </div>
-
-                <h3>${TRAINER.nickname ? TRAINER.nickname.toUpperCase() : p.name.toUpperCase()}</h3>
-                <span class="type-tag ${type}">${type}</span>
-
                 <ul class="stats">
                     <li><span>⚡⚡⚡HP⚡⚡⚡</span> <span>${p.stats[0].base_stat}</span></li>
                     <li><span>✨✨✨Attaque✨✨✨</span> <span>${p.stats[1].base_stat}</span></li>
@@ -53,6 +46,16 @@ function renderTrainerCard(state) {
                     <small>MOVIMIENTOS:</small>
                     <p>${state.trainerMoves.map(m => m.name.replace('-', ' ')).join(', ')}</p>
                 </div>
+
+                <div class="sprite-container">
+                    <img src="${p.sprites.front_default}" alt="${p.name}" />
+                </div>
+
+                <h3>${TRAINER.nickname ? TRAINER.nickname.toUpperCase() : p.name.toUpperCase()}</h3>
+                <span class="type-tag ${type}">${type}</span>
+
+                <p class="hometown">${TRAINER.catchphrase}</p>
+                <p class="hometown">${TRAINER.hometown}</p>
             </div>
         `;
     }
@@ -116,7 +119,7 @@ function renderOpponentCard(state) {
                 <div style="height: 300px; display: flex; align-items: center; justify-content: center;">
                     <p>? ? ?</p>
                 </div>
-                <p><small>Introduce un nombre para desafiar</small></p>
+                <p><small>Esperando Rival...</small></p>
             </div>
         `;
     }
@@ -136,7 +139,7 @@ function renderBattleButton(state) {
         btn.innerText = "¡A COMBATIR!";
     } else {
         btn.disabled = true;
-        btn.innerText = state.loading.opponent ? "CARGANDO..." : "ESPERANDO RIVAL...";
+        btn.innerText = state.loading.opponent ? "Cargando..." : " ↑ Introduce un nombre...";
     }
 }
 
