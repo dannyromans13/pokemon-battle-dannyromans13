@@ -1,122 +1,159 @@
-export function render(state){
+import TRAINER from "../trainer.config.js";
+
+/**
+ * Función principal que orquestra el renderizado de toda la página
+ */
+export function render(state) {
     renderTrainerCard(state);
     renderOpponentCard(state);
     renderBattleButton(state);
 }
 
-function renderTrainerCard(state){  // Esta es la tarjeta del entrenador que en este caso soy yo
-    const section = document.getElementById("trainer-card");
-    if (!section) return; 
+/**
+ * Renderiza la tarjeta de tu Pokémon (Pikachu)
+ */
+function renderTrainerCard(state) {
+    const container = document.getElementById("trainer-card");
+    if (!container) return;
 
-    if (state.loading.trainer) {        
-        section.innerHTML = createSkeleton(); // Mostrar skeleton mientras se carga el entrenador
+    if (state.loading.trainer) {
+        container.innerHTML = createSkeleton("PREPARANDO ENTRENADOR...");
         return;
     }
 
-    if (state.error.trainer) {          // Mostrar mensaje de error si falla la carga del entrenador
-        section.innerHTML = `<p class="error">${state.error.trainer}</p>`;
+    if (state.error.trainer) {
+        container.innerHTML = `<div class="card error"><p>⚠️ Error: ${state.error.trainer}</p></div>`;
         return;
     }
 
     if (state.trainer) {
-        const p = state.trainer; 
-        const type = p.types[0].type.name; // tipo principal del pókemon
-    
-        section.innerHTML = `
-            <div class="card player-side theme-${type}">
-                <h2>${TRAINER.name}</h2>
-                <p class="hometown">${TRAINER.hometown} &middot; ${TRAINER.catchphrase} </p>
+        const p = state.trainer;
+        const type = p.types[0].type.name;
+
+        container.innerHTML = `
+            <div class="card theme-${type}">
+                <h2>${TRAINER.name.toUpperCase()}</h2>
+                <p class="hometown">${TRAINER.hometown} · "${TRAINER.catchphrase}"</p>
+                
                 <div class="sprite-container">
                     <img src="${p.sprites.front_default}" alt="${p.name}" />
                 </div>
-                <h3>${p.name.toUpperCase()}</h3>
-                <p class="type-tag" ${type}>${type}</p>
+
+                <h3>${TRAINER.nickname ? TRAINER.nickname.toUpperCase() : p.name.toUpperCase()}</h3>
+                <span class="type-tag ${type}">${type}</span>
+
                 <ul class="stats">
-                    <li>⚡⚡⚡HP⚡⚡⚡: ${p.stats[0].base_stat}</li>
-                    <li>✨✨✨Attaque✨✨✨: ${p.stats[1].base_stat}</li>
-                    <li>🌩️🌩️🌩️Defensa 🌩️🌩️🌩️: ${p.stats[2].base_stat}</li>
-                    <li>💨💨💨Velocidad 💨💨💨: ${p.stats[5].base_stat}</li>
+                    <li><span>⚡⚡⚡HP⚡⚡⚡</span> <span>${p.stats[0].base_stat}</span></li>
+                    <li><span>✨✨✨Attaque✨✨✨</span> <span>${p.stats[1].base_stat}</span></li>
+                    <li><span>🌩️🌩️🌩️Defensa 🌩️🌩️🌩️</span> <span>${p.stats[2].base_stat}</span></li>
+                    <li><span>💨💨💨Velocidad 💨💨💨</span> <span>${p.stats[5].base_stat}</span></li>
                 </ul>
+
                 <div class="moves-list">
-                    <strong>Moves:</strong>
-                    <ul>
-                        ${state.trainerMoves.map(m => `<li>${m.name}</li>`).join('')}
-                    </ul>
+                    <small>MOVIMIENTOS:</small>
+                    <p>${state.trainerMoves.map(m => m.name.replace('-', ' ')).join(', ')}</p>
                 </div>
-            </div>`;
-        }
+            </div>
+        `;
     }
+}
 
-
-
-function renderOpponentCard(state){ // Esta es la tarjeta del oponente
-    const section = document.getElementById("opponent-card");
-    if (!section) return; 
+/**
+ * Renderiza la tarjeta del oponente buscado
+ */
+function renderOpponentCard(state) {
+    const container = document.getElementById("opponent-card");
+    if (!container) return;
 
     if (state.loading.opponent) {
-        section.innerHTML = createSkeleton();
+        container.innerHTML = createSkeleton("BUSCANDO RIVAL...");
         return;
     }
 
     if (state.error.opponent) {
-        section.innerHTML = `<p class="error">❌ ${state.error.opponent}</p>`;
+        container.innerHTML = `
+            <div class="card" style="border-color: #E84040;">
+                <h3 style="color: #E84040;">¡ERROR!</h3>
+                <p>${state.error.opponent}</p>
+                <p><small>Intenta con otro nombre o ID</small></p>
+            </div>
+        `;
         return;
     }
 
     if (state.opponent) {
         const o = state.opponent;
-        const type = o.types[0].type.name; // tipo principal del pókemon
+        const type = o.types[0].type.name;
 
-        section.innerHTML = `
-            <div class="card opponent-side">
-                <h2>Oponente</h2>
-                <p class="hometown">¿Quién será? 🤔</p>
-            <div class="sprite-container">
-                <img src="${o.sprites.front_default}" alt="${o.name}" />
-            </div>
-            <h3>${o.name.toUpperCase()}</h3>
-            <p class="type-tag" ${type}>${type}</p>
-            <ul class="stats">
-                <li>⚡⚡⚡HP⚡⚡⚡: ${o.stats[0].base_stat}</li>
-                <li>✨✨✨Attaque✨✨✨: ${o.stats[1].base_stat}</li>
-                <li>🌩️🌩️🌩️Defensa 🌩️🌩️🌩️: ${o.stats[2].base_stat}</li>
-                <li>💨💨💨Velocidad 💨💨💨: ${o.stats[5].base_stat}</li>
-            </ul>
-            <div class="moves-list">
-                <strong>Moves:</strong>
-                <ul>
-                    ${state.opponentMoves.map(m => `<li>${m.name}</li>`).join('')}
+        container.innerHTML = `
+            <div class="card theme-${type}">
+                <h2>OPONENTE</h2>
+                <p class="hometown">Encuentro Salvaje</p>
+                
+                <div class="sprite-container">
+                    <img src="${o.sprites.front_default}" alt="${o.name}" />
+                </div>
+
+                <h3>${o.name.toUpperCase()}</h3>
+                <span class="type-tag ${type}">${type}</span>
+
+                <ul class="stats">
+                    <li><span>⚡⚡⚡HP⚡⚡⚡</span> <span>${o.stats[0].base_stat}</span></li>
+                    <li><span>✨✨✨Attaque✨✨✨</span> <span>${o.stats[1].base_stat}</span></li>
+                    <li><span>🌩️🌩️🌩️Defensa 🌩️🌩️🌩️</span> <span>${o.stats[2].base_stat}</span></li>
+                    <li><span>💨💨💨Velocidad 💨💨💨</span> <span>${o.stats[5].base_stat}</span></li>
                 </ul>
+
+                <div class="moves-list">
+                    <small>MOVIMIENTOS:</small>
+                    <p>${state.opponentMoves.map(m => m.name.replace('-', ' ')).join(', ')}</p>
+                </div>
             </div>
-        </div>`;
+        `;
     } else {
-        section.innerHTML = `<div class="empty-state"><p>¡Ven!, busca un oponente para comenzar la batalla o tienes miedo?</p></div>`;
+        container.innerHTML = `
+            <div class="card" style="opacity: 0.5; border-style: dashed;">
+                <div style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                    <p>? ? ?</p>
+                </div>
+                <p><small>Introduce un nombre para desafiar</small></p>
+            </div>
+        `;
     }
 }
 
-function renderBattleButton(state) {   //Este es el botón para iniciar la batalla
+/**
+ * Actualiza el estado del botón de batalla central
+ */
+function renderBattleButton(state) {
     const btn = document.getElementById("start-battle");
     if (!btn) return;
 
-    cont ready = state.trainer && state.opponent && !state.loading.opponent;
-    btn.disabled = !ready;
+    const isReady = state.trainer && state.opponent && !state.loading.opponent;
 
-    if (ready) {
-        btn.classList.add("ready");
-        btn.innerText = "¡Listo para la batalla!";
+    if (isReady) {
+        btn.disabled = false;
+        btn.innerText = "¡A COMBATIR!";
     } else {
-        btn.classList.remove("ready");
-        btn.innerText = "¡Esperando al oponente!";
+        btn.disabled = true;
+        btn.innerText = state.loading.opponent ? "CARGANDO..." : "ESPERANDO RIVAL...";
     }
 }
 
-function createSkeleton() {
+/**
+ * Genera el HTML para el efecto de carga (Skeleton)
+ */
+function createSkeleton(message) {
     return `
         <div class="card skeleton">
             <div class="skeleton-title pulse"></div>
-            <div class="skeleton-sprite pulse"></div>
+            <p><small>${message}</small></p>
+            <div class="sprite-container">
+                <div class="skeleton-sprite pulse"></div>
+            </div>
             <div class="skeleton-text pulse"></div>
-            <div class="skeleton-stats pulse"></div>
+            <div class="skeleton-text pulse" style="width: 50%;"></div>
+            <div class="skeleton-text pulse"></div>
         </div>
     `;
-}   
+}

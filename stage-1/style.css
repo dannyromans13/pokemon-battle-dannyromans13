@@ -1,70 +1,141 @@
-.skeleton { 
-    background: #1e222e;
-    padding: 20px;
-    border-radius: 8px;
+/* 1. IMPORTAR FUENTE AL INICIO (Obligatorio arriba) */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #0D0F14;
+    --card-bg: #161921;
+    --accent-color: #F5C842; /* Amarillo Pikachu */
+    --text-color: #D8E0F0;
+    --error-red: #E84040;
 }
 
-.pulse {
-    display: block;
-    animation: pulse 1.5s infinite ease-in-out;
-    background:#2a3040;
-    border-radius: 4px; 
-    margin: 10px auto;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.6; }
-    50% { opacity: 1; }
-    100% { opacity: 0.6; }
-}
-
-.skeleton-sprite {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto;
-}
-
-.skeleton-title {
-    width: 60%;
-    height: 20px;
-}
-
-.skeleton-text {
-     width: 80%;
-     height: 15px;
-}
-
-.theme-electric {
-    border: 2px solid #F5C842; /* El amarillo de Pikachu */
-    box-shadow: 0 0 15px rgba(245, 200, 66, 0.3);
-}
-
-.type-tag.electric {
-    background: #F5C842;
-    color: #000;
-}
-
-.selector-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 40px;
-    flex-wrap: wrap; /* Para que en móviles se ponga uno abajo del otro */
-}
-
-.card-container {
-    flex: 1;
-    min-width: 300px;
-    max-width: 400px;
-}
-
-.controls {
-    flex: 0 1 250px;
+/* 2. ESTILOS GENERALES */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    align-self: center;
-    text-align: center;
 }
+
+header h1 {
+    font-family: 'Press Start 2P', cursive;
+    color: var(--accent-color);
+    text-shadow: 3px 3px #000;
+    font-size: 1.2rem;
+    margin: 40px 0;
+}
+
+/* 3. CONTENEDOR TIPO SELECCIÓN DE PERSONAJES */
+.selector-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    width: 95%;
+    max-width: 1200px;
+    flex-wrap: wrap;
+}
+
+/* 4. TARJETAS (ESTILO PRO) */
+.card {
+    background: var(--card-bg);
+    border: 4px double var(--accent-color);
+    border-radius: 8px;
+    padding: 20px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(245, 200, 66, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover { transform: translateY(-5px); }
+
+.sprite-container {
+    background: #080A0F;
+    border: 1px solid #2A3040;
+    border-radius: 8px;
+    margin: 15px 0;
+    padding: 10px;
+}
+
+.sprite-container img {
+    width: 140px;
+    image-rendering: pixelated;
+}
+
+.card h2 { font-size: 0.8rem; color: #5A6480; margin-bottom: 5px; }
+.card h3 { font-family: 'Press Start 2P', cursive; font-size: 0.9rem; margin: 15px 0; }
+
+.type-tag {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: #2A3040;
+}
+
+.stats {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.stats li {
+    font-size: 0.8rem;
+    padding: 8px 0;
+    border-bottom: 1px solid #2A3040;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 5. CONTROLES CENTRALES */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 250px;
+    padding-top: 50px;
+}
+
+.search-box { display: flex; flex-direction: column; gap: 10px; }
+.search-box label { font-family: 'Press Start 2P', cursive; font-size: 0.5rem; color: #5A6480; }
+
+#opponent-search {
+    background: #000;
+    border: 2px solid #2A3040;
+    color: var(--accent-color);
+    padding: 12px;
+    border-radius: 4px;
+    font-family: inherit;
+    outline: none;
+}
+
+#opponent-search:focus { border-color: var(--accent-color); }
+
+#start-battle {
+    font-family: 'Press Start 2P', cursive;
+    background: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 15px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b38f20;
+}
+
+#start-battle:active { transform: translateY(2px); box-shadow: 0 2px 0 #b38f20; }
+#start-battle:disabled { background: #2A3040; color: #5A6480; box-shadow: none; cursor: not-allowed; }
+
+/* 6. SKELETONS Y EFECTOS */
+.pulse { animation: pulse 1.5s infinite; background: #2A3040; border-radius: 4px; }
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+.skeleton-sprite { height: 140px; width: 140px; margin: 0 auto; }
+.skeleton-title { height: 20px; width: 60%; margin: 10px auto; }
