@@ -1,0 +1,265 @@
+* {
+    magin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f5f5f5;
+    color: e0e0ff;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(180deg, #1a0a2e 0%, #0a0a0f 100%);
+    border-bottom: 2px solid #F5C842; 
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #F5C842;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 20px rgba(245, 200, 66, 0.5);
+}
+
+main {
+    width: 100%;
+    max-width: 900px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;    
+}
+
+/* Para las HP barras */
+#hp-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hp-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hp-name {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a0a0cc;
+}
+
+.hp-track {
+  width: 100%;
+  height: 12px;
+  background: #1e1e2e;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #2a2a4a;
+}
+
+.hp-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease, background 0.3s ease;
+  background: #42C97A;
+}
+
+.hp-value {
+  font-size: 0.75rem;
+  color: #6060aa;
+}
+
+.vs {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #E84040;
+  text-shadow: 0 0 10px rgba(232, 64, 64, 0.6);
+  padding: 0 1rem;
+}
+
+/* Para la Arena (de pelea) */
+#arena {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #0d0d1a;
+  border: 1px solid #2a2a4a;
+  padding: 2rem;
+  border-radius: 4px;
+}
+
+.arena-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arena-side img {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+}
+
+.arena-cells {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cell {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #2a2a4a;
+  background: #111122;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+
+/* En la celda en que está el jugador*/
+.cell.player-here {
+  border-color: #4A8CF5;
+  background: rgba(74, 140, 245, 0.15);
+  box-shadow: 0 0 12px rgba(74, 140, 245, 0.4);
+}
+
+/* Advertencia cuando el enemigo está por atacar esta celda */
+.cell.warning {
+  border-color: #F5C842;
+  background: rgba(245, 200, 66, 0.12);
+  animation: pulse 0.3s ease-in-out infinite alternate;
+}
+
+/* Ataque enemigo - Atacando en este momento */
+.cell.strike {
+  border-color: #E84040;
+  background: rgba(232, 64, 64, 0.25);
+}
+
+@keyframes pulse {
+  from {
+    box-shadow: 0 0 6px rgba(245, 200, 66, 0.3);
+  }
+  to {
+    box-shadow: 0 0 18px rgba(245, 200, 66, 0.7);
+  }
+}
+
+/* Para los controles */
+#controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.8rem 1.6rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.btn-attack {
+  background: #4A8CF5;
+  color: white;
+}
+
+.btn-attack:hover:not(:disabled) {
+  background: #6aa0ff;
+  box-shadow: 0 0 12px rgba(74, 140, 245, 0.5);
+}
+
+.btn-definitive {
+  background: #F5C842;
+  color: #0a0a0f;
+}
+
+.btn-definitive:hover:not(:disabled) {
+  background: #ffd966;
+  box-shadow: 0 0 12px rgba(245, 200, 66, 0.5);
+}
+
+.btn-again {
+  background: #42C97A;
+  color: #0a0a0f;
+}
+
+.btn-again:hover {
+  background: #5adf90;
+  box-shadow: 0 0 12px rgba(66, 201, 122, 0.5);
+}
+
+button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+
+/* Barra de enfriamiento (cooldown) dentro del botón de ataque*/
+#btn-attack {
+  position: relative;
+  overflow: hidden;
+}
+
+#cooldown-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: none;
+}
+
+/* Registro de batalla */
+#log-section {
+  background: #0d0d1a;
+  border: 1px solid #2a2a4a;
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+}
+
+#log-section h3 {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: #4040aa;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+#battle-log {
+  max-height: 150px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+#battle-log p {
+  font-size: 0.82rem;
+  color: #8080bb;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid #1a1a2e;
+}
+
+#battle-log p:last-child {
+  color: #e0e0ff;
+  border-bottom: none;
+}
