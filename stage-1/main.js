@@ -116,10 +116,12 @@ function setupSearchInput() {
     debounceTimer = setTimeout(() => {
       // Realizar busqueda solo si el nombre del Pokemon es valid
       if (/^[a-zA-Z\-]+$/.test(query)) {
-      searchOpponent(query);
-    }, 500);
+          searchOpponent(query);
+        } 
+      }, 500);
   });
 }
+
 
 function setupBattleNavigation() {
   const battleBtn = document.getElementById("start-battle");
