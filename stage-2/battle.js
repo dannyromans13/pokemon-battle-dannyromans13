@@ -1,5 +1,5 @@
 import TRAINER from "../trainer.config.js";
-import { render } from "./render.js";
+//import { render } from "./render.js";
 
 export const state = {
   phase: "fighting",
