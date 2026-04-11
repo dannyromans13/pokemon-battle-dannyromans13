@@ -46,11 +46,29 @@ header h1 {
 
 main {
     width: 100%;
-    max-width: 900px;
+    max-width: 1040px;
     padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;    
+}
+
+/* Arena + registro en paralelo */
+.battle-row {
+  display: grid;
+  grid-template-columns: 1fr minmax(240px, 34%);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (max-width: 720px) {
+  .battle-row {
+    grid-template-columns: 1fr;
+  }
+  #log-section {
+    order: 2;
+    max-height: 220px;
+  }
 }
 
 /* Para las HP barras */
@@ -107,12 +125,13 @@ main {
 #arena {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
   background: #0d0d1a;
   border: 1px solid #2a2a4a;
   padding: 2rem;
   border-radius: 4px;
+  min-height: 200px;
 }
 
 .arena-side {
@@ -235,13 +254,28 @@ main {
 }
 
 .btn-move {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.45rem;
   background: #4A8CF5;
   color: #fff;
   padding: 0.55rem 0.85rem;
   font-size: 0.8rem;
-  max-width: 200px;
-  text-align: center;
+  max-width: 220px;
+  text-align: left;
   line-height: 1.2;
+}
+
+.btn-move-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.btn-move-label {
+  flex: 1;
+  min-width: 0;
 }
 
 .btn-move:hover:not(:disabled) {
@@ -282,8 +316,16 @@ button {
 }
 
 .btn-definitive {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: #F5C842;
   color: #0a0a0f;
+}
+
+.btn-def-icon {
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .btn-definitive:hover:not(:disabled) {
@@ -310,24 +352,30 @@ button.cell:disabled {
   opacity: 0.88;
 }
 
-/* Registro de batalla */
+/* Registro de batalla (panel lateral) */
 #log-section {
   background: #0d0d1a;
   border: 1px solid #2a2a4a;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.25rem;
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 #log-section h3 {
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   color: #4040aa;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 #battle-log {
-  max-height: 150px;
+  flex: 1;
+  min-height: 160px;
+  max-height: min(52vh, 320px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;

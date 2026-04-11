@@ -10,6 +10,55 @@ import {
 } from "./battle.js";
 import { render } from "./render.js";
 
+const TYPE_SYMBOLS = {
+  electric: "⚡",
+  fire: "🔥",
+  water: "💧",
+  grass: "🌿",
+  ice: "❄️",
+  fighting: "👊",
+  poison: "☠️",
+  ground: "⛰️",
+  flying: "🪶",
+  psychic: "🔮",
+  bug: "🐛",
+  rock: "🪨",
+  ghost: "👻",
+  dragon: "🐉",
+  dark: "🌑",
+  steel: "⚙️",
+  fairy: "✨",
+  normal: "⭐",
+};
+
+function symbolFromName(name) {
+  const n = (name || "").toLowerCase();
+  if (/thunder|volt|spark|shock|bolt|zap|charge/.test(n)) return "⚡";
+  if (/flame|fire|burn|ember|blaze|inferno|heat/.test(n)) return "🔥";
+  if (/water|aqua|hydro|surf|bubble|rain|dive/.test(n)) return "💧";
+  if (/leaf|vine|solar|petal|grass|seed|bullet seed/.test(n)) return "🌿";
+  if (/ice|blizzard|freeze|hail|frost|icy/.test(n)) return "❄️";
+  if (/punch|kick|brick|close combat|focus blast|karate|cross chop/.test(n)) return "👊";
+  if (/sludge|toxic|poison|acid|venom/.test(n)) return "☠️";
+  if (/earthquake|dig|sand|mud|ground/.test(n)) return "⛰️";
+  if (/wing|gust|fly|aerial|sky|air slash|brave bird/.test(n)) return "🪶";
+  if (/psychic|psybeam|confusion|zen|future sight/.test(n)) return "🔮";
+  if (/bug|string shot|pin|quiver|x-scissor/.test(n)) return "🐛";
+  if (/rock slide|stone|rock tomb|rollout|smack down/.test(n)) return "🪨";
+  if (/shadow|night shade|hex|phantom|curse|lick/.test(n)) return "👻";
+  if (/draco|dragon|outrage|twister/.test(n)) return "🐉";
+  if (/dark|bite|crunch|night slash|sucker punch|knock off/.test(n)) return "🌑";
+  if (/flash cannon|iron|steel|metal|gear/.test(n)) return "⚙️";
+  if (/moonblast|dazzling|play rough|fairy|charm/.test(n)) return "✨";
+  return "⚔️";
+}
+
+function symbolForMove(move) {
+  const typeName = move?.type?.name;
+  if (typeName && TYPE_SYMBOLS[typeName]) return TYPE_SYMBOLS[typeName];
+  return symbolFromName(move?.name);
+}
+
 function buildMoveButtons(moves) {
   const wrap = document.getElementById("move-buttons");
   if (!wrap) return;
@@ -19,7 +68,24 @@ function buildMoveButtons(moves) {
     btn.type = "button";
     btn.className = "btn-move";
     btn.dataset.moveIndex = String(i);
-    btn.textContent = (m?.name || `movimiento ${i + 1}`).replace(/-/g, " ");
+    if (m?.type?.name) btn.dataset.moveType = m.type.name;
+
+    const label = (m?.name || `movimiento ${i + 1}`).replace(/-/g, " ");
+    const sym = symbolForMove(m);
+
+    const icon = document.createElement("span");
+    icon.className = "btn-move-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = sym;
+
+    const text = document.createElement("span");
+    text.className = "btn-move-label";
+    text.textContent = label;
+
+    btn.appendChild(icon);
+    btn.appendChild(text);
+    btn.title = `${label} (${m?.type?.name || "?"})`;
+
     btn.addEventListener("click", () => {
       playerAttack(m);
     });
