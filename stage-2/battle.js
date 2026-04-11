@@ -102,6 +102,13 @@ function startCooldown() {
   cooldownRaf = requestAnimationFrame(tick);
 }
 
+export function movePlayerToCell(index) {
+  if (state.phase !== "fighting" || state.locked) return;
+  if (index < 1 || index > 3) return;
+  state.playerPosition = index;
+  render(state);
+}
+
 export function registerBattleInput() {
   if (keydownHandler) return;
   keydownHandler = (e) => {

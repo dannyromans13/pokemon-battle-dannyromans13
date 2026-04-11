@@ -48,11 +48,21 @@ function renderHP(state) {
 }
 
 function renderArena(state) {
+  const arena = document.getElementById("arena");
+  if (arena) {
+    arena.classList.toggle(
+      "arena-locked",
+      state.phase === "fighting" && state.locked
+    );
+  }
+
   for (let i = 1; i <= 3; i++) {
     const cell = document.getElementById(`cell-${i}`);
     if (!cell) continue;
 
     cell.className = "cell";
+    cell.disabled =
+      state.phase !== "fighting" || state.locked;
 
     if (state.playerPosition === i) cell.classList.add("player-here");
 
@@ -63,22 +73,20 @@ function renderArena(state) {
 }
 
 function renderControls(state) {
-  const btnAttack = document.getElementById("btn-attack");
   const btnDefinitive = document.getElementById("btn-definitive");
   const btnAgain = document.getElementById("btn-again");
-  const moveSelect = document.getElementById("move-select");
+  const moveDisabled =
+    state.attackOnCooldown || state.phase !== "fighting";
 
-  if (btnAttack) {
-    btnAttack.disabled = state.attackOnCooldown || state.phase !== "fighting";
-  }
+  document.querySelectorAll("#move-buttons .btn-move").forEach((btn) => {
+    btn.disabled = moveDisabled;
+  });
+
   if (btnDefinitive) {
     btnDefinitive.disabled = state.definitiveUsed || state.phase !== "fighting";
   }
   if (btnAgain) {
     btnAgain.style.display = state.phase === "ended" ? "block" : "none";
-  }
-  if (moveSelect) {
-    moveSelect.disabled = state.phase !== "fighting" || !state.playerMoves?.length;
   }
 }
 

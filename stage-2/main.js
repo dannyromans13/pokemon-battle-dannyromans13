@@ -5,28 +5,34 @@ import {
   playerAttack,
   playerDefinitiveAttack,
   registerBattleInput,
+  movePlayerToCell,
   state,
 } from "./battle.js";
 import { render } from "./render.js";
 
-function getSelectedMove() {
-  const select = document.getElementById("move-select");
-  if (!select || !state.playerMoves?.length) return null;
-  const idx = Math.min(Math.max(parseInt(select.value, 10) || 0, 0), state.playerMoves.length - 1);
-  return state.playerMoves[idx];
+function buildMoveButtons(moves) {
+  const wrap = document.getElementById("move-buttons");
+  if (!wrap) return;
+  wrap.innerHTML = "";
+  (moves || []).forEach((m, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn-move";
+    btn.dataset.moveIndex = String(i);
+    btn.textContent = (m?.name || `movimiento ${i + 1}`).replace(/-/g, " ");
+    btn.addEventListener("click", () => {
+      playerAttack(m);
+    });
+    wrap.appendChild(btn);
+  });
 }
 
-function populateMoveSelect(moves) {
-  const select = document.getElementById("move-select");
-  if (!select) return;
-  select.innerHTML = "";
-  (moves || []).forEach((m, i) => {
-    const opt = document.createElement("option");
-    opt.value = String(i);
-    opt.textContent = (m?.name || `movimiento-${i + 1}`).replace(/-/g, " ");
-    select.appendChild(opt);
-  });
-  select.disabled = !moves?.length;
+function wireArenaCells() {
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById(`cell-${i}`)?.addEventListener("click", () => {
+      movePlayerToCell(i);
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -50,15 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   initBattle(config);
-  populateMoveSelect(config.player.moves);
+  buildMoveButtons(config.player.moves);
+  wireArenaCells();
 
-  const btnAttack = document.getElementById("btn-attack");
   const btnDef = document.getElementById("btn-definitive");
   const btnAgain = document.getElementById("btn-again");
-
-  btnAttack?.addEventListener("click", () => {
-    playerAttack(getSelectedMove());
-  });
 
   btnDef?.addEventListener("click", () => {
     playerDefinitiveAttack();

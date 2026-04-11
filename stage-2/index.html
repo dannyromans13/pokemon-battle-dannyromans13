@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>ARENA DE BATALLA</h1>
-    <p class="header-hint"><a href="../stage-1/index.html">← Volver al selector</a> · ← → para moverte</p>
+    <p class="header-hint"><a href="../stage-1/index.html">← Volver al selector</a> · ← → o clic en casilla 1–3 para moverte</p>
   </header>
 
   <main>
@@ -37,20 +37,21 @@
       <div class="arena-side">
         <span class="arena-label">Tú</span>
         <div class="arena-cells">
-          <div id="cell-1" class="cell" aria-label="Posición 1"></div>
-          <div id="cell-2" class="cell" aria-label="Posición 2"></div>
-          <div id="cell-3" class="cell" aria-label="Posición 3"></div>
+          <button type="button" id="cell-1" class="cell" aria-label="Ir a posición 1"></button>
+          <button type="button" id="cell-2" class="cell" aria-label="Ir a posición 2"></button>
+          <button type="button" id="cell-3" class="cell" aria-label="Ir a posición 3"></button>
         </div>
       </div>
     </section>
 
     <section id="controls">
-      <label class="move-label" for="move-select">Movimiento</label>
-      <select id="move-select" aria-label="Elegir movimiento"></select>
-      <button type="button" id="btn-attack" class="btn-attack">
-        Atacar
-        <div id="cooldown-bar"></div>
-      </button>
+      <div class="move-section">
+        <span class="move-label">Ataques (un botón por movimiento; comparten enfriamiento)</span>
+        <div id="move-buttons" class="move-buttons" role="group" aria-label="Movimientos del Pokémon"></div>
+        <div class="cooldown-wrap" aria-hidden="true">
+          <div id="cooldown-bar" class="cooldown-bar-inner"></div>
+        </div>
+      </div>
       <button type="button" id="btn-definitive" class="btn-definitive">Movimiento definitivo</button>
       <button type="button" id="btn-again" class="btn-again" style="display: none;">Otra batalla</button>
     </section>
