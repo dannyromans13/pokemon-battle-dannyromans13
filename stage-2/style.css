@@ -1,12 +1,12 @@
 * {
-    magin: 0;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
     background: #f5f5f5;
-    color: e0e0ff;
+    color: #e0e0ff;
     font-family: 'Segoe UI', sans-serif;
     min-height: 100vh;
     display: flex; 
@@ -27,6 +27,21 @@ header h1 {
     color: #F5C842;
     letter-spacing: 0.3em;
     text-shadow: 0 0 20px rgba(245, 200, 66, 0.5);
+}
+
+.header-hint {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: #a0a0cc;
+}
+
+.header-hint a {
+    color: #4A8CF5;
+    text-decoration: none;
+}
+
+.header-hint a:hover {
+    text-decoration: underline;
 }
 
 main {
@@ -107,9 +122,29 @@ main {
 }
 
 .arena-side img {
-  width: 96px;
-  height: 96px;
-  image-rendering: pixelated;
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
+}
+
+.battle-sprite {
+    display: block;
+    margin: 0.5rem auto 0;
+    image-rendering: pixelated;
+    transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.battle-sprite.defeated {
+    opacity: 0.35;
+    filter: grayscale(1);
+}
+
+.arena-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: #8080bb;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
 }
 
 .arena-cells {
@@ -163,6 +198,23 @@ main {
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.move-label {
+  font-size: 0.75rem;
+  color: #a0a0cc;
+  letter-spacing: 0.08em;
+}
+
+#move-select {
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #2a2a4a;
+  background: #111122;
+  color: #e0e0ff;
+  font-size: 0.85rem;
+  min-width: 160px;
 }
 
 button {

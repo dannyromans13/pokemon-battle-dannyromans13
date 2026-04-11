@@ -1,4 +1,66 @@
-<button id="btn-attack" class="btn-attack">
-    Atacar
-    <div id="cooldown-bar"></div>
-</button>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 2 — Batalla en tiempo real</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>ARENA DE BATALLA</h1>
+    <p class="header-hint"><a href="../stage-1/index.html">← Volver al selector</a> · ← → para moverte</p>
+  </header>
+
+  <main>
+    <section id="hp-section" aria-label="Puntos de vida">
+      <div class="hp-block">
+        <div class="hp-name" id="player-name">—</div>
+        <div class="hp-track">
+          <div id="player-hp-bar" class="hp-fill" style="width: 100%;"></div>
+        </div>
+        <div class="hp-value" id="player-hp-value">—</div>
+        <img id="player-sprite" class="battle-sprite" src="" alt="Tu Pokémon" width="96" height="96">
+      </div>
+      <div class="vs">VS</div>
+      <div class="hp-block">
+        <div class="hp-name" id="opponent-name">—</div>
+        <div class="hp-track">
+          <div id="opponent-hp-bar" class="hp-fill" style="width: 100%;"></div>
+        </div>
+        <div class="hp-value" id="opponent-hp-value">—</div>
+        <img id="opponent-sprite" class="battle-sprite" src="" alt="Oponente" width="96" height="96">
+      </div>
+    </section>
+
+    <section id="arena" aria-label="Arena de esquive">
+      <div class="arena-side">
+        <span class="arena-label">Tú</span>
+        <div class="arena-cells">
+          <div id="cell-1" class="cell" aria-label="Posición 1"></div>
+          <div id="cell-2" class="cell" aria-label="Posición 2"></div>
+          <div id="cell-3" class="cell" aria-label="Posición 3"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="controls">
+      <label class="move-label" for="move-select">Movimiento</label>
+      <select id="move-select" aria-label="Elegir movimiento"></select>
+      <button type="button" id="btn-attack" class="btn-attack">
+        Atacar
+        <div id="cooldown-bar"></div>
+      </button>
+      <button type="button" id="btn-definitive" class="btn-definitive">Movimiento definitivo</button>
+      <button type="button" id="btn-again" class="btn-again" style="display: none;">Otra batalla</button>
+    </section>
+
+    <section id="log-section">
+      <h3>Registro</h3>
+      <div id="battle-log"></div>
+    </section>
+  </main>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

@@ -13,44 +13,51 @@ function renderHP(state) {
   const playerBar = document.getElementById("player-hp-bar");
   const opponentHP = document.getElementById("opponent-hp-value");
   const opponentBar = document.getElementById("opponent-hp-bar");
+  if (!playerHP || !playerBar || !opponentHP || !opponentBar) return;
 
-  const playerPct = Math.max(0, (state.playerHP / state.playerMaxHP) * 100);
-  const opponentPct = Math.max(0, (state.opponentHP / state.opponentMaxHP) * 100);
+  const pMax = state.playerMaxHP || 1;
+  const oMax = state.opponentMaxHP || 1;
+
+  const playerPct = Math.max(0, (state.playerHP / pMax) * 100);
+  const opponentPct = Math.max(0, (state.opponentHP / oMax) * 100);
 
   playerHP.textContent = `${state.playerHP} / ${state.playerMaxHP}`;
   playerBar.style.width = `${playerPct}%`;
-  playerBar.style.background = playerPct > 50 ? "#42C97A" : playerPct > 20 ? "#F5C842" : "#E84040";
+  playerBar.style.background =
+    playerPct > 50 ? "#42C97A" : playerPct > 20 ? "#F5C842" : "#E84040";
 
   opponentHP.textContent = `${state.opponentHP} / ${state.opponentMaxHP}`;
   opponentBar.style.width = `${opponentPct}%`;
-  opponentBar.style.background = opponentPct > 50 ? "#42C97A" : playerPct > 20 ? "#F5C842" : "#E84040";
+  opponentBar.style.background =
+    opponentPct > 50 ? "#42C97A" : opponentPct > 20 ? "#F5C842" : "#E84040";
 
-  // Set names and sprites if data is available
   if (state.playerData) {
-    document.getElementById("player-name").textContent = TRAINER.nickname;
-    document.getElementById("player-sprite").src = state.playerData.sprites.front_default;
+    const nameEl = document.getElementById("player-name");
+    const spr = document.getElementById("player-sprite");
+    if (nameEl) nameEl.textContent = TRAINER.nickname || state.playerData.name;
+    if (spr) spr.src = state.playerData.sprites.front_default;
   }
 
   if (state.opponentData) {
-    document.getElementById("opponent-name").textContent = state.opponentData.name;
-    document.getElementById("opponent-sprite").src = state.opponentData.sprites.front_default;
+    const nameEl = document.getElementById("opponent-name");
+    const spr = document.getElementById("opponent-sprite");
+    const raw = state.opponentData.name || "";
+    if (nameEl) nameEl.textContent = raw.replace(/^\w/, (c) => c.toUpperCase());
+    if (spr) spr.src = state.opponentData.sprites.front_default;
   }
 }
 
 function renderArena(state) {
   for (let i = 1; i <= 3; i++) {
     const cell = document.getElementById(`cell-${i}`);
-    
-    // Reset classes first
+    if (!cell) continue;
+
     cell.className = "cell";
 
-    // Player is in this cell
     if (state.playerPosition === i) cell.classList.add("player-here");
 
-    // Enemy is targeting this cell — warning
     if (state.incomingAttack === i && !state.locked) cell.classList.add("warning");
 
-    // Enemy attacked this cell — strike
     if (state.incomingAttack === i && state.locked) cell.classList.add("strike");
   }
 }
@@ -59,42 +66,36 @@ function renderControls(state) {
   const btnAttack = document.getElementById("btn-attack");
   const btnDefinitive = document.getElementById("btn-definitive");
   const btnAgain = document.getElementById("btn-again");
+  const moveSelect = document.getElementById("move-select");
 
-  // Disable attack button during cooldown or when battle ended
-  btnAttack.disabled = state.attackOnCooldown || state.phase !== "fighting";
-
-  // Disable definitive button if already used or battle ended
-  btnDefinitive.disabled = state.definitiveUsed || state.phase !== "fighting";
-
-  // Show Battle Again only when battle ended
-  btnAgain.style.display = state.phase === "ended" ? "block" : "none";
+  if (btnAttack) {
+    btnAttack.disabled = state.attackOnCooldown || state.phase !== "fighting";
+  }
+  if (btnDefinitive) {
+    btnDefinitive.disabled = state.definitiveUsed || state.phase !== "fighting";
+  }
+  if (btnAgain) {
+    btnAgain.style.display = state.phase === "ended" ? "block" : "none";
+  }
+  if (moveSelect) {
+    moveSelect.disabled = state.phase !== "fighting" || !state.playerMoves?.length;
+  }
 }
 
 function renderLog(state) {
   const log = document.getElementById("battle-log");
+  if (!log) return;
 
-  // Render all log entries
-  log.innerHTML = state.log
-    .map(entry => `<p>${entry}</p>`)
-    .join("");
+  log.innerHTML = state.log.map((entry) => `<p>${entry}</p>`).join("");
 
-  // Auto-scroll to bottom
   log.scrollTop = log.scrollHeight;
 }
 
 function renderEndScreen(state) {
-  if (state.phase !== "ended") return;
+  const pSpr = document.getElementById("player-sprite");
+  const oSpr = document.getElementById("opponent-sprite");
+  if (!pSpr || !oSpr) return;
 
-  const won = state.opponentHP <= 0;
-
-  // Add end message to log if not already there
-  const endMsg = won
-    ? `🏆 ¡Ganaste! ${TRAINER.winMessage}`
-    : `💀 ¡Perdiste! ${TRAINER.loseMessage}`;
-
-  if (!state.log.includes(endMsg)) {
-    state.log.push(endMsg);
-    renderLog(state);
-  }
+  pSpr.classList.toggle("defeated", state.phase === "ended" && state.playerHP <= 0);
+  oSpr.classList.toggle("defeated", state.phase === "ended" && state.opponentHP <= 0);
 }
-
